@@ -41,8 +41,6 @@ export function Test() {
 
   return (
     <MainLayout>
-      {/* {showInstructions && <Instructions />} */}
-
       <FormWrapper>
         <FormContainer>
           <FormTitle>Create a toast message</FormTitle>
@@ -59,6 +57,7 @@ export function Test() {
                 label="Message"
                 name="message"
                 type="textarea"
+                placeholder="A message"
                 value={value.category}
                 onChange={handleChange}
               />
@@ -69,12 +68,7 @@ export function Test() {
                 <Button type="button" nClick={() => clearNotifications()}>
                   Clear All
                 </Button>
-                <Button
-                  type="button"
-                  primary
-                  onClick={handleNotify}
-                  disabled={!value.message}
-                >
+                <Button type="button" primary lg onClick={handleNotify}>
                   Notify
                 </Button>
               </ButtonWrapper>
