@@ -33,6 +33,9 @@
       "last 1 safari version"
     ]
   },
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
   "resolutions": {
     "styled-components": "^5"
   }

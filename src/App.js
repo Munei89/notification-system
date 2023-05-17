@@ -1,14 +1,14 @@
 import React from "react";
 import { NotificationsProvider } from "./components/NotificationsProvider";
 import { Test } from "./components/test";
+import GlobalStyle from "./theme/globalStyles";
 import "./App.css";
 
 function App() {
   return (
     <NotificationsProvider>
-      <div className="app">
-        <Test />
-      </div>
+      <GlobalStyle />
+      <Test />
     </NotificationsProvider>
   );
 }
