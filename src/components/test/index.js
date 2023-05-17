@@ -29,7 +29,7 @@ export function Test() {
   const handleNotify = () => {
     notify(value.message, {
       category: category(),
-      timeout: value.timeoutSeconds,
+      timeout: value.timeoutSeconds * 1000,
     });
   };
 

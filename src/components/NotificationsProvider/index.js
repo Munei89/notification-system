@@ -1,18 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Notification from "../Notification";
+import { NotificationContainer } from "../Notification/Notification.Styles";
 const Context = React.createContext();
 
 export function NotificationsProvider({ children }) {
-  const [notifications, setNotifications] = React.useState([
-    {
-      id: 1,
-      message: "Hello",
-      category: "success",
-    },
-  ]);
+  const [notifications, setNotifications] = React.useState([]);
 
   const notify = (message, options) => {
-    console.log(message, options);
     options = {
       category: "success",
       timeout: options.timeout,
@@ -23,15 +17,9 @@ export function NotificationsProvider({ children }) {
       id,
       message,
       category: options.category,
+      timeout: options.timeout,
     };
     setNotifications((notifications) => [...notifications, notification]);
-    if (options.timeout) {
-      setTimeout(() => {
-        setNotifications((notifications) =>
-          notifications.filter((n) => n.id !== id)
-        );
-      }, options.timeout);
-    }
   };
 
   const clearNotifications = () => {
@@ -54,17 +42,18 @@ export function NotificationsProvider({ children }) {
       }}
     >
       {children}
-      <div className="notifications">
+      <NotificationContainer>
         {notifications.map((n) => (
           <Notification
             key={n.id}
             message={n.message}
             id={n.id}
             category={n.category}
+            timeout={n.timeout}
             clearNotification={clearNotification}
           />
         ))}
-      </div>
+      </NotificationContainer>
     </Context.Provider>
   );
 }
