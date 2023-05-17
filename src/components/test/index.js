@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-
-import { Instructions } from "./../instructions";
+import {
+  FormWrapper,
+  FormTitle,
+  FormContainer,
+  Form,
+  FormHolder,
+  Line,
+  ButtonWrapper,
+} from "./styles";
+import Input from "../Input";
+import Button from "../Button";
 import { useNotifications } from "./../NotificationsProvider";
+import { MainLayout } from "../../layouts";
 
 export function Test() {
   const { notify, clearNotifications } = useNotifications();
-
-  const [showInstructions, setShowInstructions] = useState(true);
-
-  console.log(useNotifications());
 
   const [value, setValue] = useState({
     timeoutSeconds: 0,
@@ -29,37 +35,47 @@ export function Test() {
   const handleNotify = () => {
     notify(value.message, {
       category: category(),
-      timeout: value.timeoutSeconds,
+      timeout: value.timeoutSeconds * 1000,
     });
   };
 
   return (
-    <div className="test">
-      {showInstructions && <Instructions />}
-      <label>
-        Timeout
-        <input
-          type="number"
-          name="timeoutSeconds"
-          value={value.timeoutSeconds}
-          onChange={handleChange}
-        ></input>
-      </label>
-      <label>
-        Message
-        <textarea
-          value={value.message}
-          name="message"
-          onChange={handleChange}
-        ></textarea>
-      </label>
-      <button type="button" onClick={handleNotify}>
-        Notify
-      </button>
-      <button onClick={() => clearNotifications()}>Clear all</button>
-      <button onClick={() => setShowInstructions(!showInstructions)}>
-        {showInstructions ? "Hide" : "Show"} instructions
-      </button>
-    </div>
+    <MainLayout>
+      <FormWrapper>
+        <FormContainer>
+          <FormTitle>Create a toast message</FormTitle>
+          <FormHolder>
+            <Form>
+              <Input
+                label="Timeout"
+                name="timeoutSeconds"
+                type="number"
+                value={value.timeoutSeconds}
+                onChange={handleChange}
+              />
+              <Input
+                label="Message"
+                name="message"
+                type="textarea"
+                placeholder="A message"
+                value={value.category}
+                onChange={handleChange}
+              />
+
+              <Line />
+              <ButtonWrapper>
+                {" "}
+                <Button type="button" nClick={() => clearNotifications()}>
+                  Clear All
+                </Button>
+                <Button type="button" primary lg onClick={handleNotify}>
+                  Notify
+                </Button>
+              </ButtonWrapper>
+            </Form>
+          </FormHolder>
+        </FormContainer>
+      </FormWrapper>
+    </MainLayout>
   );
 }
