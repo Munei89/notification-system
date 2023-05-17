@@ -1,5 +1,5 @@
 import React from "react";
-import { NotificationsProvider } from "./components/notifications";
+import { NotificationsProvider } from "./components/NotificationsProvider";
 import { Test } from "./components/test";
 import "./App.css";
 

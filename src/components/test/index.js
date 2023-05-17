@@ -4,8 +4,11 @@ import { Instructions } from "./../instructions";
 import { useNotifications } from "./../NotificationsProvider";
 
 export function Test() {
-  const { notify, clearNotifications } = useNotifications(); 
+  const { notify, clearNotifications } = useNotifications();
+
   const [showInstructions, setShowInstructions] = useState(true);
+
+  console.log(useNotifications());
 
   const [value, setValue] = useState({
     timeoutSeconds: 0,
@@ -21,8 +24,14 @@ export function Test() {
     const categories = ["success", "info", "error"];
     const index = Math.floor(Math.random() * categories.length);
     return categories[index];
-  }
+  };
 
+  const handleNotify = () => {
+    notify(value.message, {
+      category: category(),
+      timeout: value.timeoutSeconds,
+    });
+  };
 
   return (
     <div className="test">
@@ -44,13 +53,7 @@ export function Test() {
           onChange={handleChange}
         ></textarea>
       </label>
-      <button
-        type="button"
-        onClick={() => {
-    
-          notify(value.message, { category, timeout: value.timeoutSeconds });
-        }}
-      >
+      <button type="button" onClick={handleNotify}>
         Notify
       </button>
       <button onClick={() => clearNotifications()}>Clear all</button>
