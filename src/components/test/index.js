@@ -1,14 +1,37 @@
 import React, { useState } from "react";
 
 import { Instructions } from "./../instructions";
-import { useNotifications } from "./../notifications";
+import { useNotifications } from "./../NotificationsProvider";
 
 export function Test() {
-  const { notify, clearNotifications } = useNotifications(); // TODO: implement
+  const { notify, clearNotifications } = useNotifications();
 
-  const [timeoutSeconds, setTimeoutSeconds] = useState(0);
-  const [message, setMessage] = useState("A message");
   const [showInstructions, setShowInstructions] = useState(true);
+
+  console.log(useNotifications());
+
+  const [value, setValue] = useState({
+    timeoutSeconds: 0,
+    message: "A message",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValue((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const category = () => {
+    const categories = ["success", "info", "error"];
+    const index = Math.floor(Math.random() * categories.length);
+    return categories[index];
+  };
+
+  const handleNotify = () => {
+    notify(value.message, {
+      category: category(),
+      timeout: value.timeoutSeconds,
+    });
+  };
 
   return (
     <div className="test">
@@ -17,26 +40,20 @@ export function Test() {
         Timeout
         <input
           type="number"
-          value={timeoutSeconds}
-          onChange={(e) => setTimeoutSeconds(parseInt(e.target.value))}
+          name="timeoutSeconds"
+          value={value.timeoutSeconds}
+          onChange={handleChange}
         ></input>
       </label>
       <label>
         Message
         <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={value.message}
+          name="message"
+          onChange={handleChange}
         ></textarea>
       </label>
-      <button
-        type="button"
-        onClick={() => {
-          const category = ["success", "error", "info"][
-            Math.floor(Math.random() * 3)
-          ];
-          notify(message, { category, timeout: timeoutSeconds });
-        }}
-      >
+      <button type="button" onClick={handleNotify}>
         Notify
       </button>
       <button onClick={() => clearNotifications()}>Clear all</button>
