@@ -38,18 +38,31 @@ export function NotificationsProvider({ children }) {
     setNotifications([]);
   };
 
+  const clearNotification = (id) => {
+    setNotifications((notifications) =>
+      notifications.filter((n) => n.id !== id)
+    );
+  };
+
   return (
     <Context.Provider
       value={{
         notify,
         notifications,
         clearNotifications,
+        clearNotification,
       }}
     >
       {children}
       <div className="notifications">
         {notifications.map((n) => (
-          <Notification key={n.id} message={n.message} category={n.category} />
+          <Notification
+            key={n.id}
+            message={n.message}
+            id={n.id}
+            category={n.category}
+            clearNotification={clearNotification}
+          />
         ))}
       </div>
     </Context.Provider>

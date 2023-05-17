@@ -10,7 +10,7 @@ import Warning from "../../assets/svgs/Warning";
 import Info from "../../assets/svgs/Info";
 import Close from "../../assets/svgs/Close";
 
-const Notification = ({ message, category }) => {
+const Notification = ({ message, category, id, clearNotification }) => {
   const getIcon = () => {
     switch (category) {
       case "success":
@@ -31,8 +31,8 @@ const Notification = ({ message, category }) => {
           {getIcon()}
           <p>{message}</p>
         </NotificationCentent>
-        <StyledClose>
-          <Close onClick={() => console.log("close")} />
+        <StyledClose onClick={() => clearNotification(id)}>
+          <Close />
         </StyledClose>
       </NotificationItem>
     </NotificationContainer>
