@@ -23,9 +23,8 @@ const notificationProgressColors = {
 
 export const NotificationContainer = styled.div`
   position: fixed;
-  top: 20px;
+  top: 60px;
   right: 80px;
-  width: 100%;
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -37,7 +36,7 @@ export const NotificationContainer = styled.div`
 export const NotificationItem = styled.div`
   width: 100%;
   max-width: ${(props) => props.width}px;
-  padding: 20px 24px;
+  padding: 16px 24px;
   margin-top: 1rem;
   margin-bottom: 1rem;
   border-radius: 4px;
@@ -61,6 +60,10 @@ export const NotificationItem = styled.div`
     css`
       background: ${notificationColors[props.category]};
     `}
+
+  svg {
+    z-index: 1;
+  }
 `;
 
 export const NotificationCentent = styled.div`
@@ -78,15 +81,20 @@ export const NotificationCentent = styled.div`
 export const StyledClose = styled.div`
   cursor: pointer;
   z-index: 1;
+  margin-left: 16px;
+  margin-top: 8px;
 `;
 
-export const StyledNotificationProgress = styled.div`
+export const StyledNotificationProgress = styled.div.attrs((props) => ({
+  style: {
+    width: props.width,
+  },
+}))`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   background-color: ${(props) => notificationProgressColors[props.category]};
   opacity: 1;
-  width: ${(props) => props.width}%;
   transition: width 1s linear;
 `;

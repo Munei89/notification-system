@@ -8,17 +8,17 @@ import {
   Line,
   ButtonWrapper,
 } from "./styles";
-import Input from "../Input";
-import Button from "../Button";
-import { useNotifications } from "./../NotificationsProvider";
+import Input from "../../components/Input";
+import Button from "../../components/Button";
+import { useNotifications } from "../../providers/NotificationsProvider/NotificationsProvider";
 import { MainLayout } from "../../layouts";
 
-export function Test() {
+export function CreateNotification() {
   const { notify, clearNotifications } = useNotifications();
 
   const [value, setValue] = useState({
     timeoutSeconds: 0,
-    message: "A message",
+    message: "A Message",
   });
 
   const handleChange = (e) => {
@@ -50,7 +50,14 @@ export function Test() {
                 label="Timeout"
                 name="timeoutSeconds"
                 type="number"
-                value={value.timeoutSeconds}
+                min="0"
+                onInput={(e) => {
+                  e.target.value =
+                    !!e.target.value && Math.abs(e.target.value) >= 0
+                      ? Math.abs(e.target.value)
+                      : null;
+                }}
+                value={value.timeoutSeconds.toString()}
                 onChange={handleChange}
               />
               <Input
@@ -65,10 +72,15 @@ export function Test() {
               <Line />
               <ButtonWrapper>
                 {" "}
-                <Button type="button" nClick={() => clearNotifications()}>
+                <Button type="button" onClick={() => clearNotifications()}>
                   Clear All
                 </Button>
-                <Button type="button" primary lg onClick={handleNotify}>
+                <Button
+                  type="button"
+                  primary="true"
+                  lg="true"
+                  onClick={handleNotify}
+                >
                   Notify
                 </Button>
               </ButtonWrapper>
@@ -79,3 +91,5 @@ export function Test() {
     </MainLayout>
   );
 }
+
+export default CreateNotification;

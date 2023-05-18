@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import Notification from "../Notification";
-import { NotificationContainer } from "../Notification/Notification.Styles";
+import React from "react";
+import Notification from "../../components/Notification";
+import { NotificationContainer } from "../../components/Notification/Notification.Styles";
 const Context = React.createContext();
 
-export function NotificationsProvider({ children }) {
+function NotificationsProvider({ children }) {
   const [notifications, setNotifications] = React.useState([]);
 
   const notify = (message, options) => {
@@ -42,18 +42,20 @@ export function NotificationsProvider({ children }) {
       }}
     >
       {children}
-      <NotificationContainer>
-        {notifications.map((n) => (
-          <Notification
-            key={n.id}
-            message={n.message}
-            id={n.id}
-            category={n.category}
-            timeout={n.timeout}
-            clearNotification={clearNotification}
-          />
-        ))}
-      </NotificationContainer>
+      {notifications.length > 0 && (
+        <NotificationContainer>
+          {notifications.map((n) => (
+            <Notification
+              key={n.id}
+              message={n.message}
+              id={n.id}
+              category={n.category}
+              timeout={n.timeout}
+              clearNotification={clearNotification}
+            />
+          ))}
+        </NotificationContainer>
+      )}
     </Context.Provider>
   );
 }
@@ -61,3 +63,5 @@ export function NotificationsProvider({ children }) {
 export const useNotifications = () => React.useContext(Context);
 
 export const NotificationsConsumer = Context.Consumer;
+
+export default NotificationsProvider;

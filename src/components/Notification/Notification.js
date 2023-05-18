@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import {
   NotificationItem,
   NotificationCentent,
@@ -19,10 +20,10 @@ const Notification = ({
   timeout,
 }) => {
   const [width, setWidth] = useState(0);
-  const [notificationWidth, setNotificationWidth] = useState(0);
   const [delay, setDelay] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  const timer = useRef();
+  const notiItem = useRef();
+  const progressDiv = useRef();
 
   const getIcon = () => {
     switch (category) {
@@ -38,29 +39,28 @@ const Notification = ({
   };
 
   useInterval(
-    useCallback(() => setWidth((oldWidth) => oldWidth + 1), [setWidth]),
+    useCallback(() => setWidth((prev) => prev + 1), [setWidth]),
     delay
   );
 
-  const handleStartTimer = useCallback(() => {
+  const startTimer = useCallback(() => {
     setDelay(10);
   }, [setDelay]);
 
-  const handlePauseTimer = useCallback(() => {
+  const pauseTimer = useCallback(() => {
     setDelay(null);
     setWidth(5);
     setIsHovered(true);
   }, [setDelay, setWidth, setIsHovered]);
 
   useEffect(() => {
-    handleStartTimer();
+    startTimer();
 
-    return handlePauseTimer;
-  }, [handleStartTimer, handlePauseTimer]);
+    return pauseTimer;
+  }, [startTimer, pauseTimer]);
 
   useEffect(() => {
     if (timeout === 0 || !timeout) return;
-
     const currentTimeOut = setInterval(() => {
       clearNotification(id);
     }, timeout);
@@ -74,33 +74,48 @@ const Notification = ({
   }, [isHovered, clearNotification, id, timeout]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setNotificationWidth(message.length * 8 + 16);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [message, setNotificationWidth]);
+    if (
+      progressDiv.current.clientWidth === notiItem.current.clientWidth &&
+      !isHovered &&
+      timeout !== 0
+    ) {
+      clearNotification(id);
+      setDelay(null);
+    }
+    if (progressDiv.current.clientWidth === notiItem.current.clientWidth) {
+      setDelay(null);
+    }
+  }, [
+    width,
+    clearNotification,
+    pauseTimer,
+    id,
+    isHovered,
+    timeout,
+    notiItem,
+    progressDiv,
+  ]);
 
   return (
     <NotificationItem
       category={category}
-      ref={timer}
-      onMouseOver={handlePauseTimer}
-      onMouseLeave={handleStartTimer}
-      width={notificationWidth ? notificationWidth : 400}
+      ref={notiItem}
+      onMouseOver={pauseTimer}
+      onMouseLeave={startTimer}
+      width={(message.length * 16) / 0.5}
       onClick={() => {
         if (isHovered) {
           clearNotification(id);
         }
       }}
     >
-      <StyledNotificationProgress width={width} category={category} />
+      <StyledNotificationProgress
+        ref={progressDiv}
+        width={width}
+        category={category}
+      />
+      {getIcon()}
       <NotificationCentent>
-        {getIcon()}
         <p>{message}</p>
       </NotificationCentent>
       <StyledClose onClick={() => clearNotification(id)}>
@@ -111,3 +126,11 @@ const Notification = ({
 };
 
 export default Notification;
+
+Notification.propTypes = {
+  message: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  clearNotification: PropTypes.func.isRequired,
+  timeout: PropTypes.number,
+};
