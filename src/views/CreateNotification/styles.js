@@ -16,6 +16,10 @@ export const FormContainer = styled.div`
   gap: 1rem;
   width: 100%;
   max-width: 60%;
+
+  @media (max-width: 768px) {
+    max-width: 80%;
+  }
 `;
 export const FormHolder = styled.div`
   max-width: 100%;
@@ -30,6 +34,10 @@ export const Form = styled.div`
   max-width: 70%;
   width: 100%;
   padding: 50px 0;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 `;
 
 export const FormTitle = styled.div`
@@ -41,6 +49,10 @@ export const FormTitle = styled.div`
   margin-top: 25px;
   margin-bottom: 50px;
   color: #000000;
+
+  @media (max-width: 768px) {
+    margin-bottom: 8px;
+  }
 `;
 
 export const Line = styled.div`

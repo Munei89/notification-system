@@ -66,6 +66,11 @@ export const NotificationContainer = styled.div`
   align-items: end;
   padding: 1rem;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    top: 50px;
+    right: 10px;
+  }
 `;
 
 export const NotificationItem = styled.div`
